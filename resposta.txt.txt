@@ -1,0 +1,19 @@
+1) Qual fluxo os dados de um formulário em uma View deve percorrer até ser 
+armazenado na fonte de dados em um projeto DDD?
+
+R: View => Controller => Servicos de Dominio/Negocio => Repositorio
+
+2) Nossa aplicação necessita que um usuário esteja autenticado para poder navegar 
+nas funcionalidades, em .net, como podemos desenvolver essa autenticação?
+
+R: Utilizando Identity do .NET por exemplo, Tem funcoes como as Roles e Claims, e outras ferramentas OAuth 2.0
+
+3) Estamos enfrentando problemas de performance na pagina inicial de um portal que 
+tem muitos acessos. Essa página exibe eventos separados em 6 sessões do html, 
+filtrados, cada sessão, por uma regra de negócio. Trata-se de um projeto MVC, no qual 
+são realizados 6 consultas via ORM para carregar a View que será processada no 
+servidor e disponibilizada ao browser. O que podemos fazer para tentar mitigar esse 
+problema de performance?
+
+R: Se tratando de Front-End podemos fazer configurações no BundleConfig, CDN e minificar arquivos css, js.
+No Back-end podemos ter métodos assincronos e otimizar query e até utilizar Dapper se necessario.
