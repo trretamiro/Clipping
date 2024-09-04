@@ -21,6 +21,6 @@ namespace Clipping.WebApp.Models
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public IEnumerable<TagViewModel> Tags { get; set; } = new List<TagViewModel>();
 
-        public IEnumerable<UsuarioViewModel> Usuarios { get; set; } = new List<UsuarioViewModel>();
+        public List<UsuarioViewModel> Usuarios { get; set; } = new List<UsuarioViewModel>();
     }
 }

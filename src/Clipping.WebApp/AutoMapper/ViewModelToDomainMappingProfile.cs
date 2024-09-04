@@ -11,7 +11,9 @@ namespace Clipping.Business.AutoMapper
             CreateMap<UsuarioViewModel, Usuario>();
             CreateMap<TagViewModel, Tag>();
             CreateMap<NoticiaViewModel, Noticia>();
-            CreateMap<CriarNoticiaViewModel, Noticia>();
+            CreateMap<CriarNoticiaViewModel, Noticia>()
+                .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.Usuarios.FirstOrDefault()));
+
         }
     }
 }

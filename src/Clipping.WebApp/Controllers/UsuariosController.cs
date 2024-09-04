@@ -20,7 +20,7 @@ namespace Clipping.WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var usuariosViewModel = await MapEntityToViewModel<IEnumerable<Usuario>, IEnumerable<UsuarioViewModel>>(
+            var usuariosViewModel = await MapEntityToViewModel<List<Usuario>, List<UsuarioViewModel>>(
                 _usuarioAppService.ObterTodos());
 
             return View(usuariosViewModel);

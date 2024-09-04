@@ -7,7 +7,7 @@
 <h1>Lista de Usuários</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-warning">Criar Usuário</a>
+    <a asp-action="Create" class="btn btn-primary">Criar Usuário</a>
 </p>
 <table class="table">
     <thead>
@@ -22,20 +22,21 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <a asp-action="Editar" asp-route-id="@item.Id">Editar</a> |
-                <a asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a> |
-                <a asp-action="Deletar" asp-route-id="@item.Id">Deletar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <botao tipo-btn="Detalhes" route-id="@item.Id"></botao>
+                    <botao tipo-btn="Editar" route-id="@item.Id"></botao>
+                    <botao tipo-btn="Excluir" route-id="@item.Id"></botao>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

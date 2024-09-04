@@ -7,7 +7,7 @@
 <h1>Lista de Notícias</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-warning">Criar Notícia</a>
+    <a id="create" class="btn btn-primary">Criar Notícia</a>
 </p>
 <table class="table">
     <thead>
@@ -33,6 +33,7 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    @Html.HiddenFor(modelItem => item.Id)
                     <td>
                         @Html.DisplayFor(modelItem => item.Titulo)
                     </td>
@@ -51,12 +52,84 @@
                         @Html.DisplayFor(modelItem => item.Usuario.Nome)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Deletar</a>
+                        <a data-id="@item.Id" class="btn btn-info detalhes"><span class=" fa fa-search"></a>
+                        <a data-id="@item.Id" class="btn btn-warning editar"><span class="fa fa-pencil-alt"></a>
+                        <a data-id="@item.Id" class="btn btn-danger deletar"><span class="fa fa-trash"></a>
                     </td>
                 </tr>
             }
         }
     </tbody>
 </table>
+<div class="modal" id="allModal" tabindex="-1"></div>
+
+@section scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+
+            $(function () {
+                $(".detalhes").click(function () {
+                    var id = $(this).attr("data-id");
+                    $.ajax({
+                        url: '/Noticias/Details/',
+                        data: { id: id },
+                        success: function (result) {
+                            $('#allModal').html(result);
+                            $('#allModal').modal('show');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error('Erro na requisição Ajax:', textStatus, errorThrown);
+                        }
+                    });
+                });
+
+                $(".editar").click(function () {
+                    var id = $(this).attr("data-id");
+                    $.ajax({
+                        url: '/Noticias/Edit/',
+                        data: { id: id },
+                        success: function (result) {
+                            $('#allModal').html(result);
+                            $('#allModal').modal('show');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error('Erro na requisição Ajax:', textStatus, errorThrown);
+                        }
+                    });
+                });
+
+                $(".deletar").click(function () {
+                    var id = $(this).attr("data-id");
+                    $.ajax({
+                        url: '/Noticias/Delete/',
+                        data: { id: id },
+                        success: function (result) {
+                            $('#allModal').html(result);
+                            $('#allModal').modal('show');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error('Erro na requisição Ajax:', textStatus, errorThrown);
+                        }
+                    });
+                });
+
+                $('#create').click(function () {
+                    $.ajax({
+                        url: '/Noticias/Create',
+                        success: function (result) {
+                            $('#allModal').html(result);
+                            $('#allModal').modal('show');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error('Erro na requisição Ajax:', textStatus, errorThrown);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}

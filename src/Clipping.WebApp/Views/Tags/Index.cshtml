@@ -7,7 +7,7 @@
 <h1>Lista de Tags</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-warning">Criar Tag</a>
+    <a asp-action="Create" class="btn btn-primary">Criar Tag</a>
 </p>
 <table class="table">
     <thead>
@@ -26,9 +26,9 @@
                     @Html.DisplayFor(modelItem => item.Descricao)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Deletar</a>
+                    <botao tipo-btn="Detalhes" route-id="@item.Id"></botao>
+                    <botao tipo-btn="Editar" route-id="@item.Id"></botao>
+                    <botao tipo-btn="Excluir" route-id="@item.Id"></botao>
                 </td>
             </tr>
         }

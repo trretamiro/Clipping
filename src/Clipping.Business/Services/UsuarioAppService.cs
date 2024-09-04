@@ -13,7 +13,7 @@ namespace Clipping.Business.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        public async Task<IEnumerable<Usuario>> ObterTodos() => await _usuarioRepository.ObterTodos();
+        public async Task<List<Usuario>> ObterTodos() => await _usuarioRepository.ObterTodos();
 
         public async Task<Usuario> ObterPorId(int id) => await _usuarioRepository.ObterPorId(id);
 

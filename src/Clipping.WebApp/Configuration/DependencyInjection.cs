@@ -9,6 +9,9 @@ namespace Clipping.WebApp.Configuration
     {
         public static void RegisterServices(this IServiceCollection services)
         {
+            //WebApp
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             //Services
             services.AddScoped<IUsuarioAppService, UsuarioAppService>();
             services.AddScoped<ITagAppService, TagAppService>();            

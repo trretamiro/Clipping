@@ -41,18 +41,18 @@ namespace Clipping.WebApp.Controllers
 
             var noticiaViewModel = _mapper.Map<NoticiaViewModel>(noticia);
 
-            return View(noticiaViewModel);
+            return PartialView(noticiaViewModel);
         }
 
         public async Task<IActionResult> Create()
         {
             var viewModel = await PopularParaNoticias(new CriarNoticiaViewModel());
 
-            return View(viewModel);
+            return PartialView("Create", viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CriarNoticia([FromBody] CriarNoticiaViewModel model)
+        public async Task<IActionResult> CriarNoticia(CriarNoticiaViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest();
 
@@ -61,7 +61,7 @@ namespace Clipping.WebApp.Controllers
 
             await _noticiaService.CriarNoticia(noticia);
 
-            return RedirectToAction("Index", nameof(Index));
+            return Json("Noticia criada com sucesso!");
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -73,31 +73,40 @@ namespace Clipping.WebApp.Controllers
 
             var noticiaViewModel = _mapper.Map<CriarNoticiaViewModel>(noticia);
 
-            return View(noticiaViewModel);
+            var tags = await _tagAppService.ObterTodos();
+            noticiaViewModel.Tags = _mapper.Map<List<TagViewModel>>(tags);
+
+            var usuarios = await _usuarioAppService.ObterTodos();
+            noticiaViewModel.Usuarios = _mapper.Map<List<UsuarioViewModel>>(usuarios);
+
+            return PartialView("Edit", noticiaViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditarNoticia([FromBody] CriarNoticiaViewModel model)
+        public async Task<IActionResult> EditarNoticia(CriarNoticiaViewModel model)
         {
             if (model.Id <= 0) return NotFound();
 
             if (!ModelState.IsValid) return View("Edit", model);
 
             var noticia = _mapper.Map<Noticia>(model);
+
+            noticia.NoticiaTags = CriarListaNoticiaTag(model.Tags);
             await _noticiaService.EditarNoticia(noticia);
 
-            return RedirectToAction("Index", nameof(Index));
+            return Json("Noticia editada com sucesso!");
         }
 
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0) return NotFound();
 
-            var noticiaViewModel = _mapper.Map<NoticiaViewModel>(await _noticiaService.ObterPorId(id));
+            var noticia = await _noticiaService.ObterDetalhesNoticia(id);
+            if (noticia == null) return NotFound();
 
-            if (noticiaViewModel == null) return NotFound();
+            var noticiaViewModel = _mapper.Map<NoticiaViewModel>(noticia);
 
-            return View(noticiaViewModel);
+            return PartialView(noticiaViewModel);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -116,7 +125,7 @@ namespace Clipping.WebApp.Controllers
             model.Tags = _mapper.Map<IEnumerable<TagViewModel>>(await _tagAppService.ObterTodos());
             ViewBag.TagsBag = model.Tags;
 
-            model.Usuarios = _mapper.Map<IEnumerable<UsuarioViewModel>>(await _usuarioAppService.ObterTodos());
+            model.Usuarios = _mapper.Map<List<UsuarioViewModel>>(await _usuarioAppService.ObterTodos());
             ViewBag.UsuariosBag = model.Usuarios;
 
             return model;
@@ -128,6 +137,15 @@ namespace Clipping.WebApp.Controllers
             {
                 NoticiaId = 0,
                 TagId = tag.Id
+            }).ToList();
+        }
+
+        private List<UsuarioViewModel> CriarListaNoticiaComUsuario(List<Usuario> usuarios)
+        {
+            return usuarios.Select(usr => new UsuarioViewModel
+            {
+                Id = usr.Id,
+                Nome = usr.Nome
             }).ToList();
         }
     }
